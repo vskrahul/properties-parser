@@ -16,7 +16,7 @@ public class AppTest {
 	
 	@Test
 	public void matcher() {
-		String[] g = App.matcher("${wdwew}.shgfhf.${}.khk.${hkj}.kjhk.${${}cjh${}hg}");
+		String[] g = PropertiesParser.matcher("${wdwew}.shgfhf.${}.khk.${hkj}.kjhk.${${}cjh${}hg}");
 		logger.info(Arrays.toString(g));
 		Assert.assertNotNull(g);
 		Assert.assertEquals(Arrays.toString(g), "[${wdwew}, ${}, ${hkj}, ${${}cjh${}hg}]");
