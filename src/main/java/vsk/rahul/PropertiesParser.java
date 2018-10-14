@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * <ol>
  * 	<li>a=1
  * 	<li>b=1+2
- *  <li>c=${d}
+ *  <li>c=d
  *  <li>env=dev
  *  <li>conection.dev=100
  *  <li>max.connection=100*1/2
@@ -40,18 +40,27 @@ import org.slf4j.LoggerFactory;
  */
 public class PropertiesParser {
 	
-	static Logger logger = LoggerFactory.getLogger(PropertiesParser.class);
+	private static Logger logger = LoggerFactory.getLogger(PropertiesParser.class);
 	
-	static final Pattern regex = Pattern.compile("[$][{]([\\w\\d\\.])*([${\\w\\d\\.}])*[}]");
-	static final String endRegex = "[}]{1}$";
-	static final String startRegex = "^[$][{]{1}";
+	private static final Pattern regex = Pattern.compile("[$][{]([\\w\\d\\.])*([${\\w\\d}])*([\\.\\w\\d])*[}]");
+	private static final String endRegex = "[}]{1}$";
+	private static final String startRegex = "^[$][{]{1}";
 	
-	static void compile(final Properties props) {
+	public static void compile(final Properties props) {
+		logger.debug("properties before compilation: {}", props);
 		Objects.nonNull(props);
 		props.keySet().stream().map(k -> (String)k).forEach(k -> compile(props, k));
+		logger.debug("properties after compilation: {}", props);
 	}
 	
-	static String compile(Properties props, String k) {
+	/**
+	 * Compile the value for given key in the specified {@link Properties}.
+	 * 
+	 * @param props {@link Properties}
+	 * @param k key
+	 * @return returns the compiled value
+	 */
+	private static String compile(Properties props, String k) {
 		String v = (String)props.getProperty(k);
 		
 		if(Objects.isNull(v)) {
@@ -61,7 +70,7 @@ public class PropertiesParser {
 		if(!regex.matcher(v).find()) {
 			return v;
 		}
-		String[] group = matcher(v);
+		List<String> group = matcher(v);
 		String actualValue = v;
 		String lookupKey = "";
 		for(String s : group) {
@@ -75,23 +84,18 @@ public class PropertiesParser {
 		return !Objects.isNull(props.getProperty(k)) ? props.getProperty(k) : props.getProperty(actualValue);
 	}
 	
-	static String[] matcher(String v) {
+	/**
+	 * Return matching groups in the given expression
+	 * @param v property value
+	 * @return match in the given string
+	 */
+	private static List<String> matcher(String v) {
 		Matcher m = regex.matcher(v);
 		List<String> list = new ArrayList<>();
 		while(m.find()) {
 			list.add(m.group());
 		}
-		String[] s = new String[list.size()];
-		return list.toArray(s);
-	}
-	
-	public static void main(String[] args) throws Exception {
-		
-		Properties properties = new Properties();
-		properties.load(PropertiesParser.class.getResourceAsStream("/properties-parser.properties"));
-		System.out.println(properties);
-		compile(properties);
-		System.out.println(properties);
-		
+		logger.debug("matching groups in {} are {}", v, list);
+		return list;
 	}
 }
