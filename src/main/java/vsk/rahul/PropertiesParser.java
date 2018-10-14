@@ -46,6 +46,11 @@ public class PropertiesParser {
 	private static final String endRegex = "[}]{1}$";
 	private static final String startRegex = "^[$][{]{1}";
 	
+	/**
+	 * Compile and process the given {@link Properties} object.
+	 * 
+	 * @param props {@link Properties} needs to be processed.
+	 */
 	public static void compile(final Properties props) {
 		logger.debug("properties before compilation: {}", props);
 		Objects.nonNull(props);
