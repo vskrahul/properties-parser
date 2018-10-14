@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.vskrahul/properties-parser.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.vskrahul%22%20AND%20a:%22properties-parser%22)
+
 # Key Value Property parser
 
 Parsing property file which has reference to other property.
