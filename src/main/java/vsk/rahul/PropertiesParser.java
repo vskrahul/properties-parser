@@ -42,7 +42,7 @@ public class PropertiesParser {
 	
 	private static Logger logger = LoggerFactory.getLogger(PropertiesParser.class);
 	
-	private static final Pattern regex = Pattern.compile("[$][{]([\\w\\d\\.-])*([${\\w\\d}])*([\\.-\\w\\d])*[}]");
+	private static final Pattern regex = Pattern.compile("[$][{]([\\w\\d-\\.])*([${\\w\\d}])*([-\\.\\w\\d])*[}]");
 	private static final String endRegex = "[}]{1}$";
 	private static final String startRegex = "^[$][{]{1}";
 	
